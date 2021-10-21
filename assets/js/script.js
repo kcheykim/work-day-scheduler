@@ -21,7 +21,7 @@ function displaySchedule() {
     //running through the loop of the timeEl
     timeEl.each( function() {
         //setting currBlockTime to the data-id corresponding to miltary time
-        var currBlockTime = parseInt($(this).attr("data-id"));
+        var currBlockTime = parseInt($(this).attr("#data-id"));
 
         //creating an object called taskInfo with two properties of text and hour 
         var taskInfo = {
@@ -81,7 +81,7 @@ function changeSchedule () {
             $("[data-id" + blockHr + "]").children("textarea").val(blockTxt);
         }
     }*/
-}
+//}
 
 
 $(document).ready( () => {
