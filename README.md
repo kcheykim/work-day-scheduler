@@ -23,6 +23,5 @@ The purpose of this challenge is to create a daily planner called Work Day Sched
 https://kcheykim.github.io/work-day-scheduler/
 
 ## Image of Website
-![name](./assets/images/name.png?raw=true)
-
+![work-day-scheduler](./assets/images/work-day-scheduler.png?raw=true)
 
