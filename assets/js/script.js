@@ -1,97 +1,47 @@
-//currentDayEl query the currentDay ID
-var currentDayEl = $("#currentDay");
 
-//timeEL query the time-block
-var timeEl = $(".time-block");
+var currentDayEl = $("#currentDay"); //currentDayEl query the currentDay ID
 
-var submitBtnEl = $(".saveBtn");
+var timeEl = $(".time-block"); //timeEL query the time-block
 
-//currentDate is set the the moment format of day,month,date,year
-var currentDate = moment().format("dddd, MMMM Do");
+var submitBtnEl = $(".saveBtn"); //save button for input txt
 
-//currentHr is set to the whole hour
-var currentHr = moment().format("H");
+var currentDate = moment().format("dddd, MMMM Do"); //set to current moment() date
 
-//two array of scheduleList and totalObjs
-var scheduleList = JSON.parse(localStorage.getItem("taskInfo")) || [];
-const totalObjs = [];
+var currentHr = moment().format("H"); //set to whole moment hr format
 
 function displaySchedule() {
-    
-    //running through the loop of the timeEl
-    timeEl.each( function() {
-        //setting currBlockTime to the data-id corresponding to miltary time
-        var currBlockTime = parseInt($(this).attr("#data-id"));
 
-        //creating an object called taskInfo with two properties of text and hour 
-        var taskInfo = {
-            text: "",
-            hour: currBlockTime
-        }
-        //push taskInfo obj into the scheduleList array
-        scheduleList.push(taskInfo);
+    timeEl.each( function() { //walking through the element array
 
-        if(currBlockTime == currentHr){
-            $(this).children("textarea").addClass("present");  
-        } 
+        var currBlockTime = parseInt($(this).attr("data-id")); //getting each block id-hr
+        
+        //getting the txt input form the local storage
+        $(this).children(".description").val(localStorage.getItem(currBlockTime));
 
-        if(currBlockTime < currentHr) {
-            $(this).children("textarea").addClass("past");
-        } 
+        //check currHr = blockHr add class present (block color: red)
+        if(currentHr == currBlockTime) {$(this).children("textarea").addClass("present");} 
 
-        if(currBlockTime < currentHr){
-            $(this).children("textarea").addClass("future");
-        }
-      
+        //check currHr > blockHr add class past (block color: gray)
+        if(currentHr > currBlockTime) {$(this).children("textarea").addClass("past");} 
+
+        //check currHr < blockHr add class future (block color: green)
+        if(currentHr < currBlockTime) {$(this).children("textarea").addClass("future");}
     });
-    localStorage.setItem("taskInfo", JSON.stringify(scheduleList));
+
+    submitBtnEl.on("click", changeSchedule); //click save btn call changeSchedule func
 }
 
-function changeSchedule () {
+function changeSchedule (event) {  
 
-    var checkHr = parseInt($(this).attr("data-id"));
-    var text2Add = $(this).children("textarea").val();
-    for(var j = 0; j < scheduleList.length; j++) {
-        if(scheduleList[i].hour === checkHr) {
-            taskInfo[i].text = text2Add;
-            scheduleList.push(taskInfo);
-        }
-    }
+    var checkHr = $(this).parent().attr("data-id"); //getting the element id=hr
+    var text2Add = $(this).siblings(".description").val(); //getting the input text value
+    localStorage.setItem(checkHr, text2Add); //store the id-hr and input txt
 
-    localStorage.setItem("totalObjs", JSON.stringify(scheduleList)); 
-/*
-    if(submitBtnEl) {
-
-        var currBlockHr = parseInt($(this).attr("data-id"));
-        alert(currBlockHr);
-        var text2Add = $(this).children("textare").val();
-        alert(text2Add);
-       
-        for(var i = 0; i < scheduleList.length; i++) {
-            if(scheduleList[i].hour == currBlockHr) {
-                scheduleList[i].text = text2Add;
-            }
-        }
-    } else {
-        scheduleList = JSON.parse(localStorage.getItem("totalObjs"));
-        for (var j = 0; j < scheduleList.length; j++) {
-            var blockTxt = scheduleList[i].text;
-            var blockHr = scheduleList[i].hour;
-
-            $("[data-id" + blockHr + "]").children("textarea").val(blockTxt);
-        }
-    }*/
-//}
-
+} 
 
 $(document).ready( () => {
 
-   submitBtnEl.on("click", changeSchedule);
-    
-   // if(!localStorage.getItem("totalSchedule")){
-       displaySchedule();
-   // }
-    //display the current date
+    displaySchedule(); //calling displaySchedule func
     currentDayEl.innerHTML = currentDate;
-    currentDayEl.append(currentDate);
+    currentDayEl.append(currentDate); //display the current date
 });
